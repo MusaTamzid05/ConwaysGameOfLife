@@ -1,4 +1,6 @@
 mod world;
+mod game_cell;
+
 use world::World;
 
 fn main() {
