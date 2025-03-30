@@ -1,4 +1,5 @@
 use crate::game_cell::Cell;
+use std::io::{self};
 
 pub struct World {
     pub size: i32,
@@ -21,9 +22,25 @@ impl World {
 
         }
 
+        /*
         cells[10][9].alive = true;
         cells[10][10].alive = true;
         cells[10][11].alive = true;
+        */
+
+        /*
+        cells[10][5].alive = true;
+        cells[10][6].alive = true;
+        cells[9][6].alive = true;
+        cells[8][5].alive = true;
+        cells[8][6].alive = true;
+        */
+
+        cells[10][5].alive = true;
+        cells[11][6].alive = true;
+        cells[12][4].alive = true;
+        cells[12][5].alive = true;
+        cells[12][6].alive = true;
 
         Self { size, cells }
     }
@@ -107,8 +124,14 @@ impl World {
     }
 
     pub fn start(&mut self) {
-        self.update();
-        self.render();
+        loop {
+            self.render();
+            let mut input: String = String::new();
+            io::stdin().read_line(&mut input).expect("Failed to read enter");
+
+            self.update();
+
+        }
     }
 
 }
