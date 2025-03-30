@@ -21,6 +21,8 @@ impl World {
 
         }
 
+        cells[10][10].alive = true;
+
         Self { size, cells }
     }
 
@@ -32,12 +34,40 @@ impl World {
             }
             println!("");
 
-
         }
 
     }
 
-    pub fn start(&self) {
+
+    fn update(&mut self) {
+        let mut alive_data_list: Vec<(i32, i32)> = Vec::new();
+
+        for row in 0..self.size {
+            for col in 0..self.size {
+                let cell: &Cell = &self.cells[row as usize][col as usize];
+                if cell.alive {
+                    alive_data_list.push((row, col));
+                }
+            }
+        }
+
+        for (row, col) in alive_data_list {
+            let cell: &Cell = &self.cells[row as usize][col as usize];
+            let neighbour_info_list: Vec<(i32, i32)> = cell.get_neighbour_info_list();
+
+            for (n_row, n_col) in neighbour_info_list {
+                self.cells[n_row as usize][n_col as usize].alive = true;
+            }
+
+
+        }
+
+
+
+    }
+
+    pub fn start(&mut self) {
+        self.update();
         self.render();
     }
 
