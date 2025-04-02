@@ -2,7 +2,12 @@ use sdl2::Sdl;
 use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::event::Event;
+use sdl2::rect::Rect;
 use std::time::Duration;
+
+use crate::world::World;
+use crate::game_cell::Cell;
+
 
 
 const WINDOW_WIDTH: u32 = 800;
@@ -13,6 +18,8 @@ const CELL_COUNT: i32 = 20;
 pub struct MWindow {
     context: Sdl,
     canvas: Canvas<Window>,
+    world: World,
+    rect_size: u32,
 }
 
 impl MWindow {
@@ -27,10 +34,14 @@ impl MWindow {
             .unwrap();
 
         let canvas = window.into_canvas().build().unwrap();
+        let world: World = World::new(CELL_COUNT);
+        let rect_size: u32 = WINDOW_WIDTH / u32::try_from(CELL_COUNT).unwrap();
 
         Self {
             context,
-            canvas
+            canvas,
+            world,
+            rect_size,
         }
 
 
@@ -40,6 +51,23 @@ impl MWindow {
     fn render(&mut self) {
         self.canvas.set_draw_color(sdl2::pixels::Color::RGB(0, 0, 0));
         self.canvas.clear();
+
+        let cells: &Vec<Vec<Cell>> = &self.world.cells;
+        let size: i32 = i32::try_from(self.rect_size).unwrap();
+
+        for cell_row in cells {
+            for cell in cell_row {
+                let pos_y: i32 = cell.row * size;
+                let pos_x: i32 = cell.col * size;
+
+                self.canvas.set_draw_color(sdl2::pixels::Color::RGB(0, 255, 0));
+                let rect: Rect = Rect::new(pos_x, pos_y, self.rect_size, self.rect_size);
+                self.canvas.draw_rect(rect).unwrap();
+
+
+            }
+        }
+
         self.canvas.present();
 
 
