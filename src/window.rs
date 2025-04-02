@@ -3,6 +3,7 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 use sdl2::event::Event;
 use sdl2::rect::Rect;
+use sdl2::keyboard::Keycode;
 use std::time::Duration;
 
 use crate::world::World;
@@ -59,9 +60,14 @@ impl MWindow {
             for cell in cell_row {
                 let pos_y: i32 = cell.row * size;
                 let pos_x: i32 = cell.col * size;
+                let rect: Rect = Rect::new(pos_x, pos_y, self.rect_size, self.rect_size);
+
+                if cell.alive {
+                    self.canvas.set_draw_color(sdl2::pixels::Color::RGB(255, 255, 255));
+                    self.canvas.fill_rect(rect).unwrap();
+                }
 
                 self.canvas.set_draw_color(sdl2::pixels::Color::RGB(0, 255, 0));
-                let rect: Rect = Rect::new(pos_x, pos_y, self.rect_size, self.rect_size);
                 self.canvas.draw_rect(rect).unwrap();
 
 
@@ -81,6 +87,9 @@ impl MWindow {
             for event in event_pump.poll_iter() {
                 match event {
                     Event::Quit {..} => break 'running,
+                    Event::KeyDown { keycode: Some(Keycode::Return), ..} => {
+                        self.world.update();
+                    }
                     _=> {}
                 }
 

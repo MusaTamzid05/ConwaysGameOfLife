@@ -58,7 +58,7 @@ impl World {
     }
 
 
-    fn update(&mut self) {
+    pub fn update(&mut self) {
         let mut target_cell_data_list : Vec<(i32, i32, bool)> = Vec::new();
 
         for row in 0..self.size {
