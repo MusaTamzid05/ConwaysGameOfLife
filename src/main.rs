@@ -1,9 +1,10 @@
 mod world;
 mod game_cell;
+mod window;
 
-use world::World;
+use window::MWindow;
 
 fn main() {
-    let mut world: World = World::new(20);
-    world.start();
+    let mut window: MWindow = MWindow::new();
+    window.start();
 }
